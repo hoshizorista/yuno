@@ -147,6 +147,12 @@
           data-label="newTabAction"
           tabindex="-1"
         ></button>
+        <button
+          id="macro-button"
+          class="navbar-action-button i carbon:play"
+          title="Macros"
+          tabindex="-1"
+        ></button>
       </div>
     </div>
 
@@ -341,6 +347,17 @@
         <button id="password-viewer-import"><span class="i carbon:document-import"></span><span data-string="importCredentials"></span></button>
         <button id="password-viewer-export"><span class="i carbon:export"></span><span data-string="exportCredentials"></span></button>
 </div>
+    </div>
+
+    <div id="macro-manager" class="modal" hidden>
+      <h2 class="modal-title">Macros</h2>
+      <button id="macro-close" class="modal-close-button i carbon:close"></button>
+      <div id="macro-list"></div>
+      <div class="macro-controls">
+        <input id="macro-name" type="text" placeholder="Macro name" />
+        <button id="macro-record"><span class="i carbon:record"></span></button>
+        <button id="macro-play"><span class="i carbon:play"></span></button>
+      </div>
     </div>
 
     <!-- add scripts in Gruntfile.js -->

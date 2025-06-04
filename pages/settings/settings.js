@@ -672,3 +672,11 @@ function createBang (bang, snippet, redirect) {
 
   return li
 }
+
+/* macro manager link */
+const openMacroButton = document.getElementById('open-macro-manager')
+if (openMacroButton) {
+  openMacroButton.addEventListener('click', function () {
+    window.parent.postMessage('showMacroManager', '*')
+  })
+}
