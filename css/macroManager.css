@@ -1,0 +1,22 @@
+#macro-list {
+  max-height: 70vh;
+  overflow: auto;
+  margin-top: 0.5em;
+}
+
+#macro-list .macro-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+#macro-list .macro-item > * + * {
+  margin-left: 0.5em;
+}
+
+.macro-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 1em;
+  gap: 0.5em;
+}
