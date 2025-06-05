@@ -129,6 +129,30 @@ const script = `(function(){return new Promise(r=>{const o=document.createElemen
     })
   },
   addStep (step = { type: 'navigate' }) {
+    // convert stored step fields to the generic param1/param2 format that the
+    // editor UI expects. this ensures saved values appear when re-opening the
+    // editor
+    if (step && !('param1' in step)) {
+      if (step.type === 'navigate') {
+        step.param1 = step.url
+      } else if (step.type === 'click') {
+        step.param1 = step.selector
+      } else if (step.type === 'input') {
+        step.param1 = step.selector
+        step.param2 = step.text
+      } else if (step.type === 'sleep' || step.type === 'wait') {
+        step.param1 = step.duration
+      } else if (step.type === 'wait_for_selector') {
+        step.param1 = step.selector
+        step.param2 = step.timeout
+      } else if (step.type === 'press_key') {
+        step.param1 = step.key
+      } else if (step.type === 'scroll') {
+        step.param1 = step.target
+      } else if (step.type === 'screenshot') {
+        step.param1 = step.file
+      }
+    }
     const row = document.createElement('div')
     row.className = 'macro-step'
     row.draggable = true
