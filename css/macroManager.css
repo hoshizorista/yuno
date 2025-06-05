@@ -20,3 +20,16 @@
   margin-top: 1em;
   gap: 0.5em;
 }
+
+#macro-editor textarea,
+#macro-step-console pre {
+  width: 100%;
+  height: 40vh;
+  margin-top: 0.5em;
+}
+
+.macro-step-controls {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
