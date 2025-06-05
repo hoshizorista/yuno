@@ -16,6 +16,18 @@
 body.mac * {
   letter-spacing: 0.4px;
 }
+body.mac {
+  background-color: #f5f5f7;
+  color: #000;
+  font-family: "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Segoe UI", sans-serif;
+}
+body.mac button {
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+body.mac button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 [hidden] {
   display: none !important;
 }
