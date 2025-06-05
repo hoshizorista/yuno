@@ -357,6 +357,24 @@
         <input id="macro-name" type="text" placeholder="Macro name" />
         <button id="macro-record"><span class="i carbon:record"></span></button>
         <button id="macro-play"><span class="i carbon:play"></span></button>
+        <button id="macro-step"><span class="i carbon:chevron-right"></span></button>
+      </div>
+    </div>
+
+    <div id="macro-editor" class="modal" hidden>
+      <h2 class="modal-title">Edit Macro</h2>
+      <button id="macro-editor-close" class="modal-close-button i carbon:close"></button>
+      <textarea id="macro-editor-content" spellcheck="false"></textarea>
+      <button id="macro-editor-save">Save</button>
+    </div>
+
+    <div id="macro-step-console" class="modal" hidden>
+      <h2 class="modal-title">Step Macro</h2>
+      <button id="macro-step-close" class="modal-close-button i carbon:close"></button>
+      <pre id="macro-step-output"></pre>
+      <div class="macro-step-controls">
+        <button id="macro-step-next">Next (y)</button>
+        <button id="macro-step-stop">Stop</button>
       </div>
     </div>
 

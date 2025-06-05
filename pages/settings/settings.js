@@ -677,6 +677,14 @@ function createBang (bang, snippet, redirect) {
 const openMacroButton = document.getElementById('open-macro-manager')
 if (openMacroButton) {
   openMacroButton.addEventListener('click', function () {
-    window.parent.postMessage('showMacroManager', '*')
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage('showMacroManager', '*')
+      } else {
+        window.postMessage('showMacroManager', '*')
+      }
+    } catch (e) {
+      window.postMessage('showMacroManager', '*')
+    }
   })
 }
