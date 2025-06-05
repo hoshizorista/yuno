@@ -7,9 +7,8 @@
     <title>Yuno</title>
 
     <link rel="stylesheet" href="dist/bundle.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
-    <link rel="stylesheet" href="ext/icons/iconfont.css" />
-    <script src="ext/icons/feather.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
   </head>
 
   <body>
@@ -36,6 +35,18 @@
         <svg>
           <path d="M1,1 l 10,10 M1,11 l 10,-10" />
         </svg>
+      </div>
+    </div>
+
+    <div class="mac-caption-buttons">
+      <div class="element caption-close">
+        <svg viewBox="0 0 12 12"><path d="M3 3 L9 9 M9 3 L3 9" /></svg>
+      </div>
+      <div class="element caption-minimise">
+        <svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" /></svg>
+      </div>
+      <div class="element caption-maximize">
+        <svg viewBox="0 0 12 12"><path d="M3 6 L6 9 L9 6" /></svg>
       </div>
     </div>
 
@@ -118,23 +129,20 @@
     <div id="mac-window-drag-area"></div>
       <button
         id="menu-button"
-        class="navbar-action-button"
-        data-feather="more-vertical"
+        class="navbar-action-button bi bi-three-dots-vertical"
         data-label="openMenu"
         tabindex="-1"
       ></button>
       <div id="toolbar-navigation-buttons" hidden>
           <button
           id="back-button"
-          class="navbar-action-button"
-          data-feather="chevron-left"
+          class="navbar-action-button bi bi-chevron-left"
           data-label="goBack"
           tabindex="-1"
         ></button>
         <button
         id="forward-button"
-        class="navbar-action-button"
-        data-feather="chevron-right"
+        class="navbar-action-button bi bi-chevron-right"
         data-label="goForward"
         tabindex="-1"
       ></button>
@@ -148,22 +156,19 @@
       <div class="navbar-right-actions">
         <button
           id="add-tab-button"
-          class="navbar-action-button"
-          data-feather="plus"
+          class="navbar-action-button bi bi-plus"
           data-label="newTabAction"
           tabindex="-1"
         ></button>
         <button
           id="macro-button"
-          class="navbar-action-button"
-          data-feather="play"
+          class="navbar-action-button bi bi-play"
           title="Macros"
           tabindex="-1"
         ></button>
         <button
           id="agent-button"
-          class="navbar-action-button"
-          data-feather="message-circle"
+          class="navbar-action-button bi bi-chat"
           title="Agent"
           tabindex="-1"
         ></button>
@@ -214,17 +219,17 @@
 
     <div id="webviews">
       <div id="leftArrowContainer" class="arrow-indicator">
-        <i id="leftArrow" data-feather="chevron-left"></i>
+        <i id="leftArrow" class="bi bi-chevron-left"></i>
       </div>
       <div id="rightArrowContainer" class="arrow-indicator">
-        <i id="rightArrow" data-feather="chevron-right"></i>
+        <i id="rightArrow" class="bi bi-chevron-right"></i>
       </div>
       <img id="webview-placeholder" hidden aria-hidden="true" />
       <div id="ntp-content">
           <img id="ntp-background" hidden>
           <div id="ntp-background-controls">
-            <button id="ntp-image-remove"><i data-feather="trash"></i></button>
-            <button id="ntp-image-picker"><i data-feather="camera"></i></button>
+            <button id="ntp-image-remove"><i class="bi bi-trash"></i></button>
+            <button id="ntp-image-picker"><i class="bi bi-camera"></i></button>
           </div>
       </div>
     </div>
@@ -240,14 +245,14 @@
       <span id="findinpage-count" class="inline-text"></span>
       <div class="divider"></div>
       <button id="findinpage-previous-match">
-        <i data-feather="chevron-up" class="navbar-action-button"></i>
+        <i class="navbar-action-button bi bi-chevron-up"></i>
       </button>
       <button id="findinpage-next-match">
-        <i data-feather="chevron-down" class="navbar-action-button"></i>
+        <i class="navbar-action-button bi bi-chevron-down"></i>
       </button>
       <div class="divider"></div>
       <button id="findinpage-end">
-        <i data-feather="x" class="navbar-action-button"></i>
+        <i class="navbar-action-button bi bi-x"></i>
       </button>
     </div>
 
@@ -257,28 +262,27 @@
         id="task-overlay-navbar"
       >
       <div class="task-search-input-container">
-        <i data-feather="search"></i>
+        <i class="bi bi-search"></i>
         <input type="search" id="task-search-input"/>
       </div>
     </div>
       <div id="task-area"></div>
       <button id="add-task">
-        <i data-feather="plus-square"></i>
+        <i class="bi bi-plus-square"></i>
         <span></span>
       </button>
     </div>
 
     <div id="download-bar" hidden>
       <div id="download-container" role="list" class="has-thin-scrollbar"></div>
-      <button id="download-close-button" data-feather="x"></button>
+      <button id="download-close-button" class="bi bi-x"></button>
     </div>
 
     <div class="modal" id="manager-setup-dialog" hidden>
       <h3 class="modal-title" id="manager-setup-heading"></h3>
       <button
         id="manager-setup-close"
-        class="modal-close-button"
-        data-feather="x"
+        class="modal-close-button bi bi-x"
       ></button>
 
       <div id="manager-setup-instructions-primary">
@@ -330,7 +334,7 @@
         <input id="password-capture-password" type="password" required />
         <button
           id="password-capture-reveal-password"
-          data-feather="eye"
+          class="bi bi-eye"
         ></button>
       </span>
       <span class="password-capture-section">
@@ -351,7 +355,7 @@
 
     <div id="password-viewer" class="modal" hidden>
       <h2 class="modal-title" data-string="savedPasswordsHeading"></h2>
-      <button class="modal-close-button" data-feather="x"></button>
+      <button class="modal-close-button bi bi-x"></button>
       <div
         id="password-viewer-empty"
         data-string="savedPasswordsEmpty"
@@ -359,14 +363,14 @@
       ></div>
       <div id="password-viewer-list"></div>
       <div id="password-viewer-import-container">
-        <button id="password-viewer-import"><span data-feather="file-plus"></span><span data-string="importCredentials"></span></button>
-        <button id="password-viewer-export"><span data-feather="upload"></span><span data-string="exportCredentials"></span></button>
+        <button id="password-viewer-import"><span class="bi bi-file-earmark-plus"></span><span data-string="importCredentials"></span></button>
+        <button id="password-viewer-export"><span class="bi bi-upload"></span><span data-string="exportCredentials"></span></button>
 </div>
     </div>
 
     <div id="macro-manager" class="modal" hidden>
       <h2 class="modal-title">Macros</h2>
-      <button id="macro-close" class="modal-close-button" data-feather="x"></button>
+      <button id="macro-close" class="modal-close-button bi bi-x"></button>
       <div id="macro-list"></div>
       <div class="macro-controls">
         <button id="macro-create">Create Macro</button>
@@ -375,7 +379,7 @@
 
     <div id="macro-editor" class="modal" hidden>
       <h2 class="modal-title">Edit Macro</h2>
-      <button id="macro-editor-close" class="modal-close-button" data-feather="x"></button>
+      <button id="macro-editor-close" class="modal-close-button bi bi-x"></button>
       <div id="macro-editor-fields">
         <input id="macro-editor-name" type="text" placeholder="Name" />
         <input id="macro-editor-description" type="text" placeholder="Description" />
@@ -389,7 +393,7 @@
 
     <div id="agent-panel" class="side-panel" hidden>
       <h2 class="modal-title">Agents</h2>
-      <button id="agent-close" class="modal-close-button" data-feather="x"></button>
+      <button id="agent-close" class="modal-close-button bi bi-x"></button>
       <div id="agent-selection">
         <select id="agent-select"></select>
         <button id="agent-add">Add</button>
@@ -403,7 +407,7 @@
 
     <div id="agent-editor" class="modal" hidden>
       <h2 class="modal-title">Add Agent</h2>
-      <button id="agent-editor-close" class="modal-close-button" data-feather="x"></button>
+      <button id="agent-editor-close" class="modal-close-button bi bi-x"></button>
       <div id="agent-editor-fields">
         <input id="agent-editor-name" type="text" placeholder="Name" />
         <input id="agent-editor-system" type="text" placeholder="System Prompt" />
@@ -424,12 +428,5 @@
     <!-- add scripts in Gruntfile.js -->
 
     <script src="dist/bundle.js"></script>
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        if (window.feather) {
-          window.feather.replace();
-        }
-      });
-    </script>
   </body>
 </html>
