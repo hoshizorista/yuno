@@ -138,6 +138,7 @@ const macroManager = {
         macroManager.save()
         macroManager.renderList()
       })
+      item.addEventListener('dblclick', () => macroManager.editMacro(macro))
       item.appendChild(name)
       item.appendChild(play)
       item.appendChild(step)
@@ -148,10 +149,10 @@ const macroManager = {
   },
   startRecording () {
     isRecording = true
-    recordingMacro = { name: macroManager.nameInput.value || 'macro', actions: [] }
+    recordingMacro = { name: '', actions: [] }
     macroManager.recordButton.textContent = 'Stop'
     if (macroManager.toolbarRecordButton) {
-      macroManager.toolbarRecordButton.classList.remove('carbon:record')
+      macroManager.toolbarRecordButton.classList.remove('carbon:recording')
       macroManager.toolbarRecordButton.classList.add('carbon:stop')
     }
     clickListener = function (e) {
@@ -170,13 +171,15 @@ const macroManager = {
     macroManager.recordButton.textContent = 'Record'
     if (macroManager.toolbarRecordButton) {
       macroManager.toolbarRecordButton.classList.remove('carbon:stop')
-      macroManager.toolbarRecordButton.classList.add('carbon:record')
+      macroManager.toolbarRecordButton.classList.add('carbon:recording')
     }
-    if (!recordingMacro.name || recordingMacro.name === 'macro') {
-      const name = prompt('Macro name:')
-      if (name) {
-        recordingMacro.name = name
-      }
+    let name = macroManager.nameInput.value
+    if (!name) {
+      name = prompt('Macro name:') || ''
+    }
+    if (name) {
+      recordingMacro.name = name
+      macroManager.nameInput.value = name
     }
     macroManager.macros.push(recordingMacro)
     macroManager.save()
