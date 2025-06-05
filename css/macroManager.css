@@ -21,15 +21,30 @@
   gap: 0.5em;
 }
 
-#macro-editor textarea,
-#macro-step-console pre {
-  width: 100%;
-  height: 40vh;
+#macro-editor-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
   margin-top: 0.5em;
 }
 
-.macro-step-controls {
+#macro-steps {
+  margin-top: 1em;
+}
+
+.macro-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.macro-step textarea {
+  flex: 1;
+}
+
+.macro-editor-controls {
   display: flex;
   gap: 0.5em;
-  margin-top: 0.5em;
+  margin-top: 1em;
 }

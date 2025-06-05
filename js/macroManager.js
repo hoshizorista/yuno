@@ -1,82 +1,41 @@
 const settings = require('util/settings/settings.js')
 const modalMode = require('modalMode.js')
 const webviews = require('webviews.js')
-
-let isRecording = false
-let recordingMacro = null
-let clickListener = null
-let keyListener = null
+const Sortable = require('sortablejs')
+const urlParser = require('util/urlParser.js')
 
 const macroManager = {
   container: document.getElementById('macro-manager'),
   list: document.getElementById('macro-list'),
-  nameInput: document.getElementById('macro-name'),
-  recordButton: document.getElementById('macro-record'),
-  playButton: document.getElementById('macro-play'),
-  stepButton: document.getElementById('macro-step'),
+  createButton: document.getElementById('macro-create'),
   closeButton: document.getElementById('macro-close'),
-  toolbarRecordButton: document.getElementById('macro-record-button'),
   editor: {
     container: document.getElementById('macro-editor'),
-    textarea: document.getElementById('macro-editor-content'),
+    name: document.getElementById('macro-editor-name'),
+    description: document.getElementById('macro-editor-description'),
+    steps: document.getElementById('macro-steps'),
+    addStep: document.getElementById('macro-add-step'),
     save: document.getElementById('macro-editor-save'),
     close: document.getElementById('macro-editor-close'),
-    macro: null
-  },
-  stepConsole: {
-    container: document.getElementById('macro-step-console'),
-    output: document.getElementById('macro-step-output'),
-    next: document.getElementById('macro-step-next'),
-    stop: document.getElementById('macro-step-stop'),
-    close: document.getElementById('macro-step-close'),
     macro: null,
-    index: 0
+    sortable: null
   },
   macros: [],
   initialize () {
     macroManager.load()
-    macroManager.recordButton.addEventListener('click', () => {
-      if (!isRecording) {
-        macroManager.startRecording()
-      } else {
-        macroManager.stopRecording()
-      }
+    macroManager.createButton.addEventListener('click', () => {
+      macroManager.openEditor({ name: '', description: '', steps: [] })
     })
-    if (macroManager.toolbarRecordButton) {
-      macroManager.toolbarRecordButton.addEventListener('click', () => {
-        if (!isRecording) {
-          macroManager.startRecording()
-        } else {
-          macroManager.stopRecording()
-        }
-      })
-    }
-    macroManager.playButton.addEventListener('click', () => {
-      const name = macroManager.nameInput.value
-      const macro = macroManager.macros.find(m => m.name === name)
-      if (macro) {
-        macroManager.playMacro(macro)
-      }
-    })
-    macroManager.stepButton.addEventListener('click', () => {
-      const name = macroManager.nameInput.value
-      const macro = macroManager.macros.find(m => m.name === name)
-      if (macro) {
-        macroManager.stepThroughMacro(macro)
-      }
+    macroManager.closeButton.addEventListener('click', macroManager.hide)
+    macroManager.editor.addStep.addEventListener('click', () => {
+      macroManager.addStep()
     })
     macroManager.editor.save.addEventListener('click', macroManager.saveEditor)
     macroManager.editor.close.addEventListener('click', macroManager.hideEditor)
-    macroManager.stepConsole.next.addEventListener('click', () => macroManager.nextStep())
-    macroManager.stepConsole.stop.addEventListener('click', macroManager.hideStepConsole)
-    macroManager.stepConsole.close.addEventListener('click', macroManager.hideStepConsole)
-    window.addEventListener('keydown', function (e) {
-      if (!macroManager.stepConsole.container.hidden && e.key.toLowerCase() === 'y') {
-        e.preventDefault()
-        macroManager.nextStep()
-      }
+    Sortable.create(macroManager.list)
+    macroManager.editor.sortable = Sortable.create(macroManager.editor.steps, {
+      handle: '.drag-handle'
     })
-    macroManager.closeButton.addEventListener('click', macroManager.hide)
     document.getElementById('macro-button').addEventListener('click', macroManager.show)
     window.addEventListener('message', function (e) {
       if (e.data === 'showMacroManager') {
@@ -84,13 +43,6 @@ const macroManager = {
       }
     })
     ipc.on('showMacroManager', macroManager.show)
-    ipc.on('toggleMacroRecording', () => {
-      if (!isRecording) {
-        macroManager.startRecording()
-      } else {
-        macroManager.stopRecording()
-      }
-    })
     macroManager.renderList()
   },
   load () {
@@ -118,18 +70,14 @@ const macroManager = {
       item.className = 'macro-item'
       const name = document.createElement('span')
       name.textContent = macro.name
-      const play = document.createElement('button')
-      play.className = 'i carbon:play'
-      play.title = 'Play'
-      play.addEventListener('click', () => macroManager.playMacro(macro))
-      const step = document.createElement('button')
-      step.className = 'i carbon:chevron-right'
-      step.title = 'Step'
-      step.addEventListener('click', () => macroManager.stepThroughMacro(macro))
+      const run = document.createElement('button')
+      run.className = 'i carbon:play'
+      run.title = 'Run'
+      run.addEventListener('click', () => macroManager.runMacro(macro))
       const edit = document.createElement('button')
       edit.className = 'i carbon:edit'
       edit.title = 'Edit'
-      edit.addEventListener('click', () => macroManager.editMacro(macro))
+      edit.addEventListener('click', () => macroManager.openEditor(macro))
       const del = document.createElement('button')
       del.className = 'i carbon:trash-can'
       del.title = 'Delete'
@@ -138,126 +86,170 @@ const macroManager = {
         macroManager.save()
         macroManager.renderList()
       })
-      item.addEventListener('dblclick', () => macroManager.editMacro(macro))
       item.appendChild(name)
-      item.appendChild(play)
-      item.appendChild(step)
+      item.appendChild(run)
       item.appendChild(edit)
       item.appendChild(del)
       macroManager.list.appendChild(item)
     })
   },
-  startRecording () {
-    isRecording = true
-    recordingMacro = { name: '', actions: [] }
-    macroManager.recordButton.textContent = 'Stop'
-    if (macroManager.toolbarRecordButton) {
-      macroManager.toolbarRecordButton.classList.remove('carbon:recording')
-      macroManager.toolbarRecordButton.classList.add('carbon:stop')
-    }
-    clickListener = function (e) {
-      recordingMacro.actions.push({ type: 'click', x: e.clientX, y: e.clientY })
-    }
-    keyListener = function (e) {
-      recordingMacro.actions.push({ type: 'keydown', key: e.key })
-    }
-    document.addEventListener('click', clickListener, true)
-    document.addEventListener('keydown', keyListener, true)
-  },
-  stopRecording () {
-    isRecording = false
-    document.removeEventListener('click', clickListener, true)
-    document.removeEventListener('keydown', keyListener, true)
-    macroManager.recordButton.textContent = 'Record'
-    if (macroManager.toolbarRecordButton) {
-      macroManager.toolbarRecordButton.classList.remove('carbon:stop')
-      macroManager.toolbarRecordButton.classList.add('carbon:recording')
-    }
-    let name = macroManager.nameInput.value
-    if (!name) {
-      name = prompt('Macro name:') || ''
-    }
-    if (name) {
-      recordingMacro.name = name
-      macroManager.nameInput.value = name
-    }
-    macroManager.macros.push(recordingMacro)
-    macroManager.save()
-    macroManager.renderList()
-  },
-  playMacro (macro) {
-    let delay = 0
-    macro.actions.forEach(action => {
-      setTimeout(() => {
-        if (action.type === 'click') {
-          const el = document.elementFromPoint(action.x, action.y)
-          if (el) {
-            el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-          }
-        } else if (action.type === 'keydown') {
-          const active = document.activeElement
-          const evt = new KeyboardEvent('keydown', { key: action.key, bubbles: true })
-          active.dispatchEvent(evt)
-        }
-      }, delay)
-      delay += 150
-    })
-  },
-  stepThroughMacro (macro) {
-    macroManager.stepConsole.macro = macro
-    macroManager.stepConsole.index = 0
-    macroManager.stepConsole.container.hidden = false
-    macroManager.showStep()
-    modalMode.toggle(true, { onDismiss: macroManager.hideStepConsole })
-  },
-  showStep () {
-    const m = macroManager.stepConsole
-    if (!m.macro || m.index >= m.macro.actions.length) {
-      macroManager.hideStepConsole()
-      return
-    }
-    m.output.textContent = JSON.stringify(m.macro.actions[m.index], null, 2)
-  },
-  nextStep () {
-    const m = macroManager.stepConsole
-    if (!m.macro) return
-    const action = m.macro.actions[m.index]
-    if (action) {
-      macroManager.playMacro({ actions: [action] })
-      m.index++
-      macroManager.showStep()
-    } else {
-      macroManager.hideStepConsole()
-    }
-  },
-  hideStepConsole () {
-    macroManager.stepConsole.container.hidden = true
-    modalMode.toggle(false)
-    macroManager.stepConsole.macro = null
-  },
-  editMacro (macro) {
+  openEditor (macro) {
     macroManager.editor.macro = macro
-    macroManager.editor.textarea.value = JSON.stringify(macro.actions, null, 2)
+    macroManager.editor.name.value = macro.name
+    macroManager.editor.description.value = macro.description || ''
+    empty(macroManager.editor.steps)
+    macro.steps.forEach(step => macroManager.addStep(step))
     macroManager.editor.container.hidden = false
     modalMode.toggle(true, { onDismiss: macroManager.hideEditor })
-  },
-  saveEditor () {
-    try {
-      const actions = JSON.parse(macroManager.editor.textarea.value)
-      macroManager.editor.macro.actions = actions
-      macroManager.save()
-      macroManager.renderList()
-      macroManager.hideEditor()
-    } catch (e) {
-      alert('Invalid JSON')
-    }
   },
   hideEditor () {
     macroManager.editor.container.hidden = true
     modalMode.toggle(false)
+    macroManager.editor.macro = null
   },
-  isRecording () {
-    return isRecording
+  addStep (step = { type: 'navigate' }) {
+    const row = document.createElement('div')
+    row.className = 'macro-step'
+    row.draggable = true
+    const drag = document.createElement('span')
+    drag.textContent = '\u2630'
+    drag.className = 'drag-handle'
+    const type = document.createElement('select')
+    ;['navigate', 'click', 'input', 'sleep', 'scroll', 'screenshot', 'run_js'].forEach(t => {
+      const opt = document.createElement('option')
+      opt.value = t
+      opt.textContent = t
+      if (step.type === t) opt.selected = true
+      type.appendChild(opt)
+    })
+    const p1 = document.createElement('input')
+    p1.className = 'param1'
+    const p2 = document.createElement('input')
+    p2.className = 'param2'
+    const text = document.createElement('textarea')
+    text.className = 'paramText'
+    const remove = document.createElement('button')
+    remove.textContent = '✕'
+    remove.addEventListener('click', () => row.remove())
+    function updateVisibility () {
+      p1.type = 'text'
+      p2.type = 'text'
+      text.style.display = 'none'
+      p1.placeholder = ''
+      p2.placeholder = ''
+      p1.value = step.param1 || ''
+      p2.value = step.param2 || ''
+      text.value = step.script || ''
+      if (type.value === 'navigate') {
+        p1.placeholder = 'URL'
+        p2.style.display = 'none'
+      } else if (type.value === 'click') {
+        p1.placeholder = 'Selector'
+        p2.style.display = 'none'
+      } else if (type.value === 'input') {
+        p1.placeholder = 'Selector'
+        p2.placeholder = 'Text'
+        p2.style.display = 'inline-block'
+      } else if (type.value === 'sleep') {
+        p1.placeholder = 'ms'
+        p2.style.display = 'none'
+      } else if (type.value === 'scroll') {
+        p1.placeholder = 'Selector or x,y'
+        p2.style.display = 'none'
+      } else if (type.value === 'screenshot') {
+        p1.placeholder = 'File name'
+        p2.style.display = 'none'
+      } else if (type.value === 'run_js') {
+        p1.style.display = 'none'
+        p2.style.display = 'none'
+        text.style.display = 'block'
+      }
+    }
+    type.addEventListener('change', updateVisibility)
+    updateVisibility()
+    row.appendChild(drag)
+    row.appendChild(type)
+    row.appendChild(p1)
+    row.appendChild(p2)
+    row.appendChild(text)
+    row.appendChild(remove)
+    macroManager.editor.steps.appendChild(row)
+  },
+  getStepFromRow (row) {
+    const type = row.querySelector('select').value
+    const step = { type }
+    if (type === 'run_js') {
+      step.script = row.querySelector('.paramText').value
+    } else if (type === 'input') {
+      step.selector = row.querySelector('.param1').value
+      step.text = row.querySelector('.param2').value
+    } else if (type === 'navigate') {
+      step.url = row.querySelector('.param1').value
+    } else if (type === 'click') {
+      step.selector = row.querySelector('.param1').value
+    } else if (type === 'sleep') {
+      step.duration = parseInt(row.querySelector('.param1').value) || 0
+    } else if (type === 'scroll') {
+      step.target = row.querySelector('.param1').value
+    } else if (type === 'screenshot') {
+      step.file = row.querySelector('.param1').value
+    }
+    return step
+  },
+  saveEditor () {
+    const steps = Array.from(macroManager.editor.steps.children).map(row => macroManager.getStepFromRow(row))
+    macroManager.editor.macro.name = macroManager.editor.name.value
+    macroManager.editor.macro.description = macroManager.editor.description.value
+    macroManager.editor.macro.steps = steps
+    if (!macroManager.macros.includes(macroManager.editor.macro)) {
+      macroManager.macros.push(macroManager.editor.macro)
+    }
+    macroManager.save()
+    macroManager.renderList()
+    macroManager.hideEditor()
+  },
+  runMacro (macro) {
+    async function executeStep (step) {
+      const id = tabs.getSelected()
+      if (step.type === 'navigate') {
+        ipc.send('loadURLInView', { id, url: urlParser.parse(step.url) })
+      } else if (step.type === 'click') {
+        const script = `document.querySelector(${JSON.stringify(step.selector)}).click()`
+        webviews.callAsync(id, 'executeJavaScript', script)
+      } else if (step.type === 'input') {
+        const script = `var el=document.querySelector(${JSON.stringify(step.selector)});if(el){el.focus();el.value=${JSON.stringify(step.text)}}`
+        webviews.callAsync(id, 'executeJavaScript', script)
+      } else if (step.type === 'sleep') {
+        await new Promise(resolve => setTimeout(resolve, step.duration))
+      } else if (step.type === 'scroll') {
+        const s = step.target
+        const script = `
+          (function(){
+            if(document.querySelector(${JSON.stringify(s)})){
+              document.querySelector(${JSON.stringify(s)}).scrollIntoView()
+            } else {
+              var coords=${JSON.stringify(s)}.split(',');
+              if(coords.length===2){window.scrollTo(parseInt(coords[0]),parseInt(coords[1]))}
+            }
+          })()
+        `
+        webviews.callAsync(id, 'executeJavaScript', script)
+      } else if (step.type === 'screenshot') {
+        ipc.send('saveViewCapture', { id })
+      } else if (step.type === 'run_js') {
+        webviews.callAsync(id, 'executeJavaScript', step.script)
+      }
+    }
+    ;(async () => {
+      for (const step of macro.steps) {
+        try {
+          await executeStep(step)
+        } catch (e) {
+          console.warn('Macro step failed', e)
+          break
+        }
+      }
+    })()
   }
 }
 
