@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../css/base.css" />
     <link rel="stylesheet" href="settings.css" />
     <link rel="stylesheet" href="../../ext/icons/iconfont.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <script src="../../ext/icons/feather.min.js"></script>
   </head>
 
   <body>
@@ -21,7 +23,7 @@
       <h3 data-string="settingsPrivacyHeading"></h3>
 
       <div class="settings-info-subheading" id="content-blocking-statistics">
-        <i class="i carbon:manage-protection"></i>
+        <i data-feather="shield"></i>
         <span
           data-string="settingsBlockedRequestCount"
           data-allowHTML
@@ -375,7 +377,7 @@
       hidden
     >
       <div class="container">
-        <i class="i carbon:information"></i>
+        <i data-feather="info"></i>
         <span data-string="settingsRestartRequired"></span>
       </div>
     </div>
@@ -387,5 +389,12 @@
     <script src="../../js/util/passwordManager.js"></script>
     <script src="../../dist/localization.build.js"></script>
     <script src="settings.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.feather) {
+          window.feather.replace();
+        }
+      });
+    </script>
   </body>
 </html>

@@ -288,6 +288,9 @@ body:not(.touch)
   height: 36px;
   margin-top: -0.5px;
   font-size: 1.4em !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 body.windows .navbar-action-button:not(:disabled):hover {
   background-color: rgba(0, 0, 0, 0.075);

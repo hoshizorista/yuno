@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="viewer.css" />
     <link rel="stylesheet" href="../../ext/icons/iconfont.css" />
     <link rel="stylesheet" href="../settingsDropdown.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <script src="../../ext/icons/feather.min.js"></script>
   </head>
 
   <body>
@@ -27,12 +29,14 @@
     <div class="side-gutter" id="side-gutter-right">
       <button
         id="download-button"
-        class="i carbon:download viewer-ui hidden"
+        data-feather="download"
+        class="viewer-ui hidden"
       ></button>
 
       <button
       id="settings-button"
-      class="i carbon:settings-adjust viewer-ui hidden"
+      data-feather="sliders"
+      class="viewer-ui hidden"
       data-label="viewSettings"
     ></button>
 
@@ -68,5 +72,12 @@
     <script src="../../js/util/theme.js"></script>
     <script type="module" src="viewer.js"></script>
     <script src="pdfThemeSelector.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.feather) {
+          window.feather.replace();
+        }
+      });
+    </script>
   </body>
 </html>
