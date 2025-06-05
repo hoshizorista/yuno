@@ -110,7 +110,18 @@ const macroManager = {
   pickSelector (input) {
     const id = tabs.getSelected()
     const script = `(function(){return new Promise(r=>{const o=document.createElement('div');o.style.position='fixed';o.style.top=0;o.style.left=0;o.style.right=0;o.style.bottom=0;o.style.zIndex=2147483647;o.style.cursor='crosshair';o.style.background='rgba(0,0,0,0.05)';const h=document.createElement('div');h.style.position='absolute';h.style.border='2px solid red';o.appendChild(h);function m(e){const b=e.target.getBoundingClientRect();h.style.top=b.top+'px';h.style.left=b.left+'px';h.style.width=b.width+'px';h.style.height=b.height+'px';}function s(e){e.preventDefault();e.stopPropagation();document.removeEventListener('mousemove',m,true);document.removeEventListener('click',s,true);o.remove();r(g(e.target));}function g(el){if(el.id)return '#'+el.id;const p=[];while(el&&el.nodeType===1&&el!==document.body){let t=el.nodeName.toLowerCase();let sib=el,n=1;while(sib.previousElementSibling){sib=sib.previousElementSibling;if(sib.nodeName===el.nodeName)n++;}if(n>1)t+=':nth-of-type('+n+')';p.unshift(t);el=el.parentElement;}return p.join(' > ');}document.addEventListener('mousemove',m,true);document.addEventListener('click',s,true);document.body.appendChild(o);});})()`
+
+    // temporarily allow interaction with the page so the user can pick an element
+    webviews.hidePlaceholder('macroManager')
+    modalMode.toggle(false)
+    macroManager.container.hidden = true
+
     webviews.callAsync(id, 'executeJavaScript', script, function (err, selector) {
+      // restore modal UI once selection is finished
+      macroManager.container.hidden = false
+      modalMode.toggle(true, { onDismiss: macroManager.hide })
+      webviews.requestPlaceholder('macroManager')
+
       if (!err && selector) {
         input.value = selector
       }
