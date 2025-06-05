@@ -11,12 +11,12 @@ body.is-modal-mode #overlay {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.2); /* Subtler, darker overlay */
+  background: rgba(255, 255, 255, 0.5);
   z-index: 1;
   pointer-events: none;
 }
 body.is-edit-mode.is-ntp.ntp-has-background #overlay {
-  opacity: 0.33; /* This seems specific, might need review in context of new overlay */
+  opacity: 0.33;
 }
 
 body.is-modal-mode #overlay {
@@ -25,7 +25,7 @@ body.is-modal-mode #overlay {
   pointer-events: all;
 }
 body.dark-mode #overlay {
-  background: rgba(0, 0, 0, 0.4); /* Slightly more opaque for dark mode */
+  background: rgba(33, 37, 43, 0.4);
 }
 
 .modal {
@@ -36,11 +36,10 @@ body.dark-mode #overlay {
   left: 50%;
   z-index: 9;
   transform: translate(-50%, -50%);
-  padding: 16px; /* Adjusted padding */
-  background: #F7F7F7; /* Very light gray */
-  border: 1px solid #C0C0C0; /* Subtle border */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Softer shadow */
-  border-radius: 10px; /* Larger radius */
+  padding: 1em 1.25em;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  background: #fff;
   animation: modal-appear 0.2s;
 }
 
@@ -55,46 +54,31 @@ body.dark-mode #overlay {
 }
 
 .dark-mode .modal {
-  background-color: #3A3A3C; /* Standard dark macOS modal background */
-  border: 1px solid #505050;
+  background-color: rgb(33, 37, 43);
 }
 
 .modal-close-button {
   position: absolute;
-  top: 12px; /* Adjusted position */
-  right: 12px; /* Adjusted position */
-  width: 24px; /* Defined size */
-  height: 24px; /* Defined size */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 0.66em;
+  right: 0.66em;
+  font-size: 1.66em !important;
+  opacity: 0.75;
   border-radius: 50%;
-  color: #707070; /* Icon color */
-  font-size: 1em !important; /* Normalize icon font size */
-  background: none; /* Remove old background */
-  opacity: 1; /* Remove old opacity */
-  padding: 0; /* Remove old padding */
+  padding: 0.05em;
 }
 
 .modal-close-button:hover {
-  background-color: rgba(0,0,0,0.1);
-  color: #333;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.075);
 }
 
 .dark-mode .modal-close-button:hover {
-  background-color: rgba(255,255,255,0.15);
-  color: #EEE;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .modal-title {
-  font-size: 1.2em; /* Adjusted font size */
-  font-weight: 600; /* Semibold */
-  color: #333;
+  font-size: 1.5em;
   margin-top: 0;
-  margin-bottom: 16px; /* Adjusted margin */
-  max-width: 90%; /* Keep or adjust as needed */
-}
-
-.dark-mode .modal-title {
-  color: #E0E0E0;
+  margin-bottom: 1em;
+  max-width: 90%;
 }

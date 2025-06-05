@@ -1,7 +1,7 @@
 :root {
   --agent-panel-width: 320px;
   --agent-panel-font: inherit;
-  /* --agent-panel-bg is effectively replaced by direct background-color */
+  --agent-panel-bg: #fff;
   --agent-panel-z: 10000;
 }
 
@@ -11,18 +11,18 @@
   right: 0;
   width: var(--agent-panel-width);
   height: 100%;
-  background: #F0F0F0; /* Consistent light gray background */
+  background: var(--agent-panel-bg);
   z-index: var(--agent-panel-z);
   display: flex;
   flex-direction: column;
   font-family: var(--agent-panel-font);
-  border-left: 1px solid #D1D1D1; /* Consistent border color */
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 #agent-panel.agent-left {
   right: auto;
   left: 0;
-  border-right: 1px solid #D1D1D1; /* Consistent border color */
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   border-left: none;
 }
 
@@ -32,19 +32,12 @@
 }
 
 .dark-mode #agent-panel {
-  background: #3A3A3C; /* Consistent dark background */
-  border-left-color: #505050;
+  background: rgb(33, 37, 43);
+  border-left-color: rgba(255, 255, 255, 0.15);
 }
 
 .dark-mode #agent-panel.agent-left {
-  border-right-color: #505050;
-}
-
-/* Ensuring select and button in agent-selection inherit global styles */
-#agent-selection select,
-#agent-selection button {
-  /* Styles from base.css should apply. Add specifics if needed. */
-  /* Example: ensure select has consistent height/padding with other inputs if necessary */
+  border-right-color: rgba(255, 255, 255, 0.15);
 }
 
 #agent-selection {

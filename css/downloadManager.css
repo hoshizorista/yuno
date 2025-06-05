@@ -3,11 +3,11 @@
   position: absolute;
   bottom: 0px;
   left: 0px;
-  background: #F0F0F0; /* Consistent light gray */
+  background: rgb(250, 250, 250);
   width: 100%;
-  border-top: 1px solid #D1D1D1; /* Consistent border */
+  border-top: 1px solid rgb(214, 214, 214);
   color: black;
-  padding: 0 8px; /* Adjusted padding */
+  padding: 0 0.5em;
   z-index: 9;
 }
 
@@ -16,12 +16,19 @@ body.task-overlay-is-shown #download-bar {
 }
 
 .dark-mode #download-bar {
-  background: #3A3A3C; /* Consistent dark background */
+  background: rgb(41, 44, 52);
   color: white;
-  border-top-color: #505050; /* Consistent dark border */
+  border-top-color: rgb(80, 80, 80);
 }
 
-/* Remove general button hover styles, should be handled by base.css */
+#download-bar button:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.dark-mode #download-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+}
 
 #download-container {
   display: flex;
@@ -40,24 +47,23 @@ body.task-overlay-is-shown #download-bar {
   max-width: 300px;
   line-height: 39px;
   overflow: hidden;
-  border-right: 1px solid #E0E0E0; /* Lighter separator */
-  background-color: transparent; /* Items part of the bar */
+  border-right: 1px rgb(230, 230, 230) solid;
   position: relative;
   transition: 0.05s background-color;
 }
 
 .dark-mode .download-item {
-  border-right-color: #4A4A4C; /* Darker separator for dark mode */
+  border-right-color: rgb(80, 80, 80);
 }
 
 .download-item:hover,
 .download-item.completed:active {
-  background-color: rgba(0,0,0,0.05); /* Subtle hover */
+  background-color: rgb(238, 238, 238);
 }
 
 .dark-mode .download-item:hover,
 .dark-mode .download-item.completed:active {
-  background-color: rgba(255,255,255,0.05); /* Subtle dark mode hover */
+  background-color: rgb(50, 55, 65);
 }
 
 .download-title {
@@ -95,20 +101,20 @@ body.task-overlay-is-shown #download-bar {
 }
 
 .download-progress {
-  width: calc(100% - 1em); /* Keep existing width logic */
-  height: 6px; /* Slightly thicker */
-  margin-top: 0.33em; /* Keep existing margin */
-  background: #007AFF; /* Standard macOS blue */
-  border-radius: 3px;
+  width: calc(100% - 1em);
+  height: 4px;
+  margin-top: 0.33em;
+  background: rgb(22, 122, 224);
+  border-radius: 2px;
   position: absolute;
-  top: calc(-0.5em + 2px); /* Keep existing positioning logic */
-  transform: scaleX(0.56); /* Keep existing transform logic */
+  top: calc(-0.5em + 2px);
+  transform: scaleX(0.56);
   transform-origin: top left;
   transition: 1s transform, 0.2s opacity;
 }
 
 .dark-mode .download-progress {
-  background: #0A84FF; /* Brighter blue for dark mode */
+  background: lightskyblue;
 }
 
 .download-progress[hidden] {
@@ -116,39 +122,23 @@ body.task-overlay-is-shown #download-bar {
   opacity: 0;
 }
 
-.download-action-button,
+.download-action-button {
+  position: absolute;
+  right: 0.7em;
+  opacity: 0.7;
+  margin: auto;
+  padding: 0.2em;
+}
+
 #download-close-button {
-  position: absolute; /* Keep if needed for specific layout, or adjust */
-  right: 0.7em; /* Example, adjust as needed */
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  opacity: 0.66;
+  font-size: 1.2em;
+  margin: auto;
+  margin-left: 0.4em;
+  padding: 0.2em;
   border-radius: 50%;
-  color: #707070; /* Icon color */
-  background: none; /* Remove explicit background */
-  opacity: 1; /* Remove old opacity */
-  padding: 0; /* Reset padding */
-  /* font-size: 1em; /* Normalize for icon fonts if used */ */
 }
 
-#download-close-button {
-  /* Specific adjustments if different from generic .download-action-button */
-  margin: auto 0 auto 0.4em; /* Adjust margin to align if needed */
-  right: auto; /* Override if it's not on the far right like other action buttons */
-  left: auto; /* Ensure it's not pulled left if other action buttons are also present */
-  position: relative; /* If not absolutely positioned like other action buttons */
-}
-
-.download-action-button:hover,
-#download-close-button:hover {
-  background-color: rgba(0,0,0,0.075);
-  color: #333;
-}
-
-.dark-mode .download-action-button:hover,
-.dark-mode #download-close-button:hover {
-  background-color: rgba(255,255,255,0.1);
-  color: #EEE;
+.dark-mode #download-close-button {
+  opacity: 0.9;
 }
