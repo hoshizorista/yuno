@@ -1,6 +1,8 @@
 const settings = require('util/settings/settings.js')
 const modalMode = require('modalMode.js')
 const macroManager = require('macroManager.js')
+const webviews = require('webviews.js')
+const places = require('places/places.js')
 
 const agentManager = {
   container: document.getElementById('agent-panel'),
@@ -18,12 +20,15 @@ const agentManager = {
     name: document.getElementById('agent-editor-name'),
     system: document.getElementById('agent-editor-system'),
     provider: document.getElementById('agent-editor-provider'),
-    key: document.getElementById('agent-editor-key')
+    key: document.getElementById('agent-editor-key'),
+    rag: document.getElementById('agent-editor-rag')
   },
   agents: [],
   chats: {},
   initialize () {
     agentManager.load()
+    agentManager.applyUISettings()
+    settings.listen('agentUI', agentManager.applyUISettings)
     agentManager.openButton.addEventListener('click', agentManager.show)
     agentManager.closeButton.addEventListener('click', agentManager.hide)
     agentManager.sendButton.addEventListener('click', agentManager.sendMessage)
@@ -31,6 +36,11 @@ const agentManager = {
     agentManager.editor.close.addEventListener('click', agentManager.hideEditor)
     agentManager.editor.save.addEventListener('click', agentManager.saveEditor)
     agentManager.renderSelect()
+    window.addEventListener('message', e => {
+      if (e.data && e.data.type === 'switchAgent') {
+        agentManager.setAgent(e.data.index)
+      }
+    })
   },
   load () {
     agentManager.agents = settings.get('agents') || []
@@ -38,15 +48,25 @@ const agentManager = {
   save () {
     settings.set('agents', agentManager.agents)
   },
+  applyUISettings () {
+    const ui = settings.get('agentUI') || {}
+    document.documentElement.style.setProperty('--agent-panel-width', ui.width || '320px')
+    document.documentElement.style.setProperty('--agent-panel-font', ui.font || 'inherit')
+    document.documentElement.style.setProperty('--agent-panel-bg', ui.background || '#fff')
+    agentManager.container.classList.toggle('agent-left', ui.position === 'left')
+    agentManager.container.classList.toggle('agent-right', ui.position !== 'left')
+  },
   show () {
     agentManager.load()
     agentManager.renderSelect()
     agentManager.container.hidden = false
     modalMode.toggle(true, { onDismiss: agentManager.hide })
+    webviews.requestPlaceholder('agentPanel')
   },
   hide () {
     agentManager.container.hidden = true
     modalMode.toggle(false)
+    webviews.hidePlaceholder('agentPanel')
   },
   renderSelect () {
     empty(agentManager.select)
@@ -62,6 +82,7 @@ const agentManager = {
     agentManager.editor.system.value = ''
     agentManager.editor.provider.value = 'openai'
     agentManager.editor.key.value = ''
+    agentManager.editor.rag.checked = true
     agentManager.editor.container.hidden = false
     modalMode.toggle(true, { onDismiss: agentManager.hideEditor })
   },
@@ -74,7 +95,8 @@ const agentManager = {
       name: agentManager.editor.name.value,
       system: agentManager.editor.system.value,
       provider: agentManager.editor.provider.value,
-      key: agentManager.editor.key.value
+      key: agentManager.editor.key.value,
+      rag: agentManager.editor.rag.checked
     }
     agentManager.agents.push(a)
     agentManager.save()
@@ -93,6 +115,20 @@ const agentManager = {
       .map(m => `${m.name}: ${m.description}`)
       .join('\n')
   },
+  setAgent (idx) {
+    if (typeof idx === 'number' && agentManager.agents[idx]) {
+      agentManager.select.value = idx
+    }
+  },
+  async getRAGContext (query) {
+    try {
+      const res = await places.searchPlacesFullText(query)
+      return res.slice(0, 3).map(p => `${p.title} - ${p.url}\n${(p.extractedText || '').slice(0, 200)}`).join('\n---\n')
+    } catch (e) {
+      console.warn('rag error', e)
+      return ''
+    }
+  },
   async sendMessage () {
     const agent = agentManager.agents[agentManager.select.value]
     if (!agent) { return }
@@ -102,6 +138,12 @@ const agentManager = {
     agentManager.addMessage('user', message)
     const history = agentManager.chats[agent.name] || []
     history.push({ role: 'user', content: message })
+    if (agent.rag) {
+      const ctx = await agentManager.getRAGContext(message)
+      if (ctx) {
+        history.push({ role: 'system', content: 'Context:\n' + ctx })
+      }
+    }
     const body = await agentManager.callProvider(agent, history)
     if (body) {
       const response = body.content || body
@@ -172,3 +214,7 @@ const agentManager = {
 }
 
 module.exports = agentManager
+
+if (typeof window !== 'undefined') {
+  window.agentManager = agentManager
+}

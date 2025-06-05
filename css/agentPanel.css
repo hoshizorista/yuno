@@ -1,19 +1,43 @@
+:root {
+  --agent-panel-width: 320px;
+  --agent-panel-font: inherit;
+  --agent-panel-bg: #fff;
+  --agent-panel-z: 10000;
+}
+
 #agent-panel {
   position: fixed;
   top: 0;
   right: 0;
-  width: 320px;
+  width: var(--agent-panel-width);
   height: 100%;
-  background: #fff;
-  z-index: 9;
+  background: var(--agent-panel-bg);
+  z-index: var(--agent-panel-z);
   display: flex;
   flex-direction: column;
+  font-family: var(--agent-panel-font);
   border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#agent-panel.agent-left {
+  right: auto;
+  left: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: none;
+}
+
+#agent-panel.agent-right {
+  left: auto;
+  right: 0;
 }
 
 .dark-mode #agent-panel {
   background: rgb(33, 37, 43);
   border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode #agent-panel.agent-left {
+  border-right-color: rgba(255, 255, 255, 0.15);
 }
 
 #agent-selection {

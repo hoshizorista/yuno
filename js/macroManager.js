@@ -3,6 +3,7 @@ const modalMode = require('modalMode.js')
 const webviews = require('webviews.js')
 const Sortable = require('sortablejs')
 const urlParser = require('util/urlParser.js')
+const browserUI = require('browserUI.js')
 
 const macroManager = {
   container: document.getElementById('macro-manager'),
@@ -160,7 +161,7 @@ const script = `(function(){return new Promise(r=>{const o=document.createElemen
     drag.textContent = '\u2630'
     drag.className = 'drag-handle'
     const type = document.createElement('select')
-    ;['navigate', 'click', 'input', 'sleep', 'wait', 'wait_for_selector', 'press_key', 'scroll', 'screenshot', 'run_js'].forEach(t => {
+    ;['navigate', 'click', 'input', 'sleep', 'wait', 'wait_for_selector', 'press_key', 'scroll', 'screenshot', 'new_tab', 'close_tab', 'run_js'].forEach(t => {
       const opt = document.createElement('option')
       opt.value = t
       opt.textContent = t
@@ -222,6 +223,14 @@ const script = `(function(){return new Promise(r=>{const o=document.createElemen
         p1.placeholder = 'File name'
         p2.style.display = 'none'
         pick.style.display = 'none'
+      } else if (type.value === 'new_tab') {
+        p1.placeholder = 'URL (optional)'
+        p2.style.display = 'none'
+        pick.style.display = 'none'
+      } else if (type.value === 'close_tab') {
+        p1.style.display = 'none'
+        p2.style.display = 'none'
+        pick.style.display = 'none'
       } else if (type.value === 'run_js') {
         p1.style.display = 'none'
         p2.style.display = 'none'
@@ -263,6 +272,10 @@ const script = `(function(){return new Promise(r=>{const o=document.createElemen
       step.target = row.querySelector('.param1').value
     } else if (type === 'screenshot') {
       step.file = row.querySelector('.param1').value
+    } else if (type === 'new_tab') {
+      step.url = row.querySelector('.param1').value
+    } else if (type === 'close_tab') {
+      // no params
     }
     return step
   },
@@ -332,6 +345,11 @@ const script = `(function(){return new Promise(r=>{const o=document.createElemen
         webviews.callAsync(id, 'executeJavaScript', script)
       } else if (step.type === 'screenshot') {
         ipc.send('saveViewCapture', { id })
+      } else if (step.type === 'new_tab') {
+        const newId = tabs.add({ url: step.url })
+        browserUI.addTab(newId)
+      } else if (step.type === 'close_tab') {
+        browserUI.closeTab(tabs.getSelected())
       } else if (step.type === 'run_js') {
         webviews.callAsync(id, 'executeJavaScript', step.script)
       }
