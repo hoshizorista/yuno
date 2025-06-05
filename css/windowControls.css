@@ -170,3 +170,43 @@ body.dark-mode.task-overlay-is-shown #linux-control-buttons {
   fill-opacity: 0.45;
   stroke-opacity: 0.7;
 }
+
+/* Mac style caption buttons */
+
+.mac-caption-buttons {
+  display: flex;
+  position: absolute;
+  top: var(--control-space-top);
+  left: var(--control-space-left);
+  z-index: 10;
+}
+
+.mac-caption-buttons .element {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mac-caption-buttons .caption-close {
+  background-color: #ff5f57;
+}
+.mac-caption-buttons .caption-minimise {
+  background-color: #febc2e;
+}
+.mac-caption-buttons .caption-maximize {
+  background-color: #28c940;
+}
+
+.mac-caption-buttons .element > svg {
+  width: 6px;
+  height: 6px;
+  stroke: #2c2c2c;
+}
+
+.mac-caption-buttons .element:hover {
+  filter: brightness(85%);
+}

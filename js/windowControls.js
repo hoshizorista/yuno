@@ -20,6 +20,10 @@ function initialize () {
   var captionClose =
   document.querySelector('.windows-caption-buttons .caption-close, body.linux .titlebar-linux .caption-close')
 
+  var macClose = document.querySelector('.mac-caption-buttons .caption-close')
+  var macMinimize = document.querySelector('.mac-caption-buttons .caption-minimise')
+  var macMaximize = document.querySelector('.mac-caption-buttons .caption-maximize')
+
   var linuxClose = document.querySelector('#linux-control-buttons #close-button')
   var linuxMinimize = document.querySelector('#linux-control-buttons #minimize-button')
   var linuxMaximize = document.querySelector('#linux-control-buttons #maximize-button')
@@ -59,6 +63,22 @@ function initialize () {
       ipc.invoke('close')
     })
   }
+
+  macClose.addEventListener('click', function () {
+    ipc.invoke('close')
+  })
+  macMaximize.addEventListener('click', function () {
+    if (windowIsFullscreen) {
+      ipc.invoke('setFullScreen', false)
+    } else if (windowIsMaximized) {
+      ipc.invoke('unmaximize')
+    } else {
+      ipc.invoke('maximize')
+    }
+  })
+  macMinimize.addEventListener('click', function () {
+    ipc.invoke('minimize')
+  })
 
   ipc.on('maximize', function (e) {
     windowIsMaximized = true
