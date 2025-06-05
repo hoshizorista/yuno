@@ -91,6 +91,7 @@ const macroManager = {
   hide () {
     macroManager.container.hidden = true
     modalMode.toggle(false)
+    webviews.hidePlaceholder('macroManager')
   },
   renderList () {
     empty(macroManager.list)
