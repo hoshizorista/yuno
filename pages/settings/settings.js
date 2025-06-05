@@ -684,3 +684,30 @@ if (openMacroButton) {
     }
   })
 }
+
+/* agent UI settings */
+const agentPos = document.getElementById('agent-ui-position')
+const agentWidth = document.getElementById('agent-ui-width')
+const agentFont = document.getElementById('agent-ui-font')
+const agentBg = document.getElementById('agent-ui-bg')
+
+function saveAgentUI () {
+  settings.set('agentUI', {
+    position: agentPos.value,
+    width: agentWidth.value + 'px',
+    font: agentFont.value,
+    background: agentBg.value
+  })
+}
+
+[agentPos, agentWidth, agentFont, agentBg].forEach(el => {
+  if (el) el.addEventListener('input', saveAgentUI)
+})
+
+settings.get('agentUI', ui => {
+  ui = ui || {}
+  if (agentPos) agentPos.value = ui.position || 'right'
+  if (agentWidth) agentWidth.value = parseInt(ui.width || 320)
+  if (agentFont) agentFont.value = ui.font || ''
+  if (agentBg) agentBg.value = ui.background || '#ffffff'
+})

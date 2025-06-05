@@ -353,6 +353,20 @@
         <button id="open-macro-manager">Open Macro Manager</button>
       </div>
     </div>
+    <div class="settings-container" id="agent-ui-settings-container">
+      <h3>Agent UI</h3>
+      <div class="setting-section">
+        <label>Position
+          <select id="agent-ui-position">
+            <option value="right">Right</option>
+            <option value="left">Left</option>
+          </select>
+        </label>
+        <label>Width <input id="agent-ui-width" type="number" min="200" /></label>
+        <label>Font <input id="agent-ui-font" type="text" /></label>
+        <label>Background <input id="agent-ui-bg" type="color" /></label>
+      </div>
+    </div>
     <!-- this needs to be placed at the bottom so that sticky positioning works correctly -->
     <div
       class="banner yellow-background"
