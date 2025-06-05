@@ -109,7 +109,6 @@ const macroManager = {
   },
   pickSelector (input) {
     const id = tabs.getSelected()
-const id = tabs.getSelected()
 const script = `(function(){return new Promise(r=>{const o=document.createElement('div');o.style.position='fixed';o.style.top=0;o.style.left=0;o.style.right=0;o.style.bottom=0;o.style.zIndex=2147483647;o.style.cursor='crosshair';o.style.background='rgba(0,0,0,0.05)';const h=document.createElement('div');h.style.position='absolute';h.style.border='2px solid red';o.appendChild(h);function d(x,y){o.style.display='none';const el=document.elementFromPoint(x,y);o.style.display='';return el;}function m(e){const t=d(e.clientX,e.clientY);if(!t)return;const b=t.getBoundingClientRect();h.style.top=b.top+'px';h.style.left=b.left+'px';h.style.width=b.width+'px';h.style.height=b.height+'px';}function s(e){e.preventDefault();e.stopPropagation();document.removeEventListener('mousemove',m,true);document.removeEventListener('click',s,true);const el=d(e.clientX,e.clientY);o.remove();r(g(el));}function g(el){if(el.id)return '#'+el.id;const p=[];while(el&&el.nodeType===1&&el!==document.body){let t=el.nodeName.toLowerCase();let sib=el,n=1;while(sib.previousElementSibling){sib=sib.previousElementSibling;if(sib.nodeName===el.nodeName)n++;}if(n>1)t+=':nth-of-type('+n+')';p.unshift(t);el=el.parentElement;}return p.join(' > ');}document.addEventListener('mousemove',m,true);document.addEventListener('click',s,true);document.body.appendChild(o);});})()`
 
 
