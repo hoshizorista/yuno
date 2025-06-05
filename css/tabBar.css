@@ -37,6 +37,8 @@
   transition: 0.1s width;
   white-space: nowrap;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 #toolbar-navigation-buttons.can-go-forward:hover {

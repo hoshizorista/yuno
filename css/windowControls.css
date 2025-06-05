@@ -175,6 +175,7 @@ body.dark-mode.task-overlay-is-shown #linux-control-buttons {
 
 .mac-caption-buttons {
   display: flex;
+  align-items: center;
   position: absolute;
   top: var(--control-space-top);
   left: var(--control-space-left);
