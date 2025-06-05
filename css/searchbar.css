@@ -2,10 +2,10 @@
   z-index: 3;
   position: fixed;
   top: calc(var(--control-space-top) + 36px + 10px); /* Navbar content area (36px) + 10px margin */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  max-width: 700px;
+  left: 50%; /* Restored */
+  transform: translateX(-50%); /* Restored */
+  width: 60%; /* Restored */
+  max-width: 700px; /* Restored */
   background-color: #F5F5F5;
   color: #000;
   border: 1px solid #D1D1D1;
@@ -19,12 +19,13 @@
 
 #searchbar input[type="text"],
 #searchbar input[type="search"] {
-  border: none !important; /* Important to override base.css potentially */
-  background-color: transparent !important;
+  border: none;
+  background-color: transparent;
   font-size: 1.2em;
-  padding: 10px 0 !important;
-  height: auto !important;
-  box-shadow: none !important; /* Remove focus shadow if needed */
+  padding: 10px 0;
+  height: auto;
+  box-shadow: none;
+  /* Removed !important markers, relying on specificity or base styles */
 }
 
 .searchbar-plugin-container {

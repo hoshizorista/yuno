@@ -8,8 +8,8 @@
   outline: none;
   z-index: 2;
   padding-top: var(--control-space-top);
-  padding-left: calc(var(--control-space-left) + 58px); /* Space for window controls */
-  padding-right: 0; /* Let .navbar-right-actions handle its own margin */
+  padding-left: calc(var(--control-space-left) + 58px); /* Restored */
+  padding-right: 0; /* Restored */
   background-color: #ECECEC; /* New background color */
   border-bottom: 1px solid #D1D1D1; /* New bottom border */
 }
@@ -286,7 +286,7 @@ body:not(.touch)
   padding-left: 0.5em;
 }
 .navbar-right-actions {
-  margin-right: var(--control-space-right); /* This should correctly space it from the window edge */
+  margin-right: var(--control-space-right); /* Restored */
   /* If navbar has padding-right: 0, this margin is essential. */
 }
 

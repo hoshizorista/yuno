@@ -1,7 +1,6 @@
 body {
   --control-space-top: 0px;
-  --control-space-left: 75px; /* Default space for new buttons */
-  --control-space-right: 12px; /* Default small padding */
+  /* --control-space-left and --control-space-right removed from here */
 }
 /* window drag regions */
 
