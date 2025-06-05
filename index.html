@@ -14,30 +14,12 @@
     <div class="window-drag-area"></div>
 
     <div class="windows-caption-buttons">
-      <div class="element caption-minimise">
-        <svg>
-          <line x1="1" y1="5.5" x2="11" y2="5.5" />
-        </svg>
-      </div>
-      <div class="element caption-maximize">
-        <svg>
-          <rect x="1.5" y="1.5" width="9" height="9" />
-        </svg>
-      </div>
-      <div class="element caption-restore">
-        <svg>
-          <rect x="1.5" y="3.5" width="7" height="7" />
-          <polyline points="3.5,3.5 3.5,1.5 10.5,1.5 10.5,8.5 8.5,8.5" />
-        </svg>
-      </div>
-      <div class="element caption-close">
-        <svg>
-          <path d="M1,1 l 10,10 M1,11 l 10,-10" />
-        </svg>
-      </div>
+      <div class="caption-button button-close" id="button-close"></div>
+      <div class="caption-button button-minimize" id="button-minimize"></div>
+      <div class="caption-button button-maximize" id="button-maximize"></div>
     </div>
 
-    <button id="linux-control-buttons" class="theme-text-color">
+    <button id="linux-control-buttons" class="theme-text-color" style="display: none;">
       <svg
         width="74"
         height="24"
@@ -116,20 +98,20 @@
     <div id="mac-window-drag-area"></div>
       <button
         id="menu-button"
-        class="navbar-action-button i carbon:overflow-menu-vertical"
+        class="navbar-action-button i mgs:ellipsis-vertical"
         data-label="openMenu"
         tabindex="-1"
       ></button>
       <div id="toolbar-navigation-buttons" hidden>
           <button
           id="back-button"
-          class="navbar-action-button i carbon:chevron-left"
+          class="navbar-action-button i mgs:chevron-left"
           data-label="goBack"
           tabindex="-1"
         ></button>
         <button
         id="forward-button"
-        class="navbar-action-button i carbon:chevron-right"
+        class="navbar-action-button i mgs:chevron-right"
         data-label="goForward"
         tabindex="-1"
       ></button>
@@ -143,19 +125,19 @@
       <div class="navbar-right-actions">
         <button
           id="add-tab-button"
-          class="navbar-action-button i carbon:add"
+          class="navbar-action-button i mgs:plus"
           data-label="newTabAction"
           tabindex="-1"
         ></button>
         <button
           id="macro-button"
-          class="navbar-action-button i carbon:play"
+          class="navbar-action-button i mgs:play-solid"
           title="Macros"
           tabindex="-1"
         ></button>
         <button
           id="agent-button"
-          class="navbar-action-button i carbon:ibm-watson"
+          class="navbar-action-button i mgs:brain"
           title="Agent"
           tabindex="-1"
         ></button>
@@ -206,17 +188,17 @@
 
     <div id="webviews">
       <div id="leftArrowContainer" class="arrow-indicator">
-        <i id="leftArrow" class="i carbon:chevron-left"></i>
+        <i id="leftArrow" class="i mgs:chevron-left"></i>
       </div>
       <div id="rightArrowContainer" class="arrow-indicator">
-        <i id="rightArrow" class="i carbon:chevron-right"></i>
+        <i id="rightArrow" class="i mgs:chevron-right"></i>
       </div>
       <img id="webview-placeholder" hidden aria-hidden="true" />
       <div id="ntp-content">
           <img id="ntp-background" hidden>
           <div id="ntp-background-controls">
-            <button id="ntp-image-remove"><i class="i carbon:trash-can"></i></button>
-            <button id="ntp-image-picker"><i class="i carbon:camera"></i></button>
+            <button id="ntp-image-remove"><i class="i mgs:trash"></i></button>
+            <button id="ntp-image-picker"><i class="i mgs:camera"></i></button>
           </div>
       </div>
     </div>
@@ -232,14 +214,14 @@
       <span id="findinpage-count" class="inline-text"></span>
       <div class="divider"></div>
       <button id="findinpage-previous-match">
-        <i class="i carbon:chevron-up navbar-action-button"></i>
+        <i class="i mgs:chevron-up navbar-action-button"></i>
       </button>
       <button id="findinpage-next-match">
-        <i class="i carbon:chevron-down navbar-action-button"></i>
+        <i class="i mgs:chevron-down navbar-action-button"></i>
       </button>
       <div class="divider"></div>
       <button id="findinpage-end">
-        <i class="i carbon:close navbar-action-button"></i>
+        <i class="i mgs:x navbar-action-button"></i>
       </button>
     </div>
 
@@ -249,27 +231,27 @@
         id="task-overlay-navbar"
       >
       <div class="task-search-input-container">
-        <i class="i carbon:search"></i>
+        <i class="i mgs:search"></i>
         <input type="search" id="task-search-input"/>
       </div>
     </div>
       <div id="task-area"></div>
       <button id="add-task">
-        <i class="i carbon:new-tab"></i>
+        <i class="i mgs:plus-square"></i>
         <span></span>
       </button>
     </div>
 
     <div id="download-bar" hidden>
       <div id="download-container" role="list" class="has-thin-scrollbar"></div>
-      <button id="download-close-button" class="i carbon:close"></button>
+      <button id="download-close-button" class="i mgs:x"></button>
     </div>
 
     <div class="modal" id="manager-setup-dialog" hidden>
       <h3 class="modal-title" id="manager-setup-heading"></h3>
       <button
         id="manager-setup-close"
-        class="modal-close-button i carbon:close"
+        class="modal-close-button i mgs:x"
       ></button>
 
       <div id="manager-setup-instructions-primary">
@@ -321,7 +303,7 @@
         <input id="password-capture-password" type="password" required />
         <button
           id="password-capture-reveal-password"
-          class="i carbon:view"
+          class="i mgs:eye"
         ></button>
       </span>
       <span class="password-capture-section">
@@ -342,7 +324,7 @@
 
     <div id="password-viewer" class="modal" hidden>
       <h2 class="modal-title" data-string="savedPasswordsHeading"></h2>
-      <button class="modal-close-button i carbon:close"></button>
+      <button class="modal-close-button i mgs:x"></button>
       <div
         id="password-viewer-empty"
         data-string="savedPasswordsEmpty"
@@ -350,14 +332,14 @@
       ></div>
       <div id="password-viewer-list"></div>
       <div id="password-viewer-import-container">
-        <button id="password-viewer-import"><span class="i carbon:document-import"></span><span data-string="importCredentials"></span></button>
-        <button id="password-viewer-export"><span class="i carbon:export"></span><span data-string="exportCredentials"></span></button>
+        <button id="password-viewer-import"><span class="i mgs:arrow-down-doc"></span><span data-string="importCredentials"></span></button>
+        <button id="password-viewer-export"><span class="i mgs:arrow-up-doc"></span><span data-string="exportCredentials"></span></button>
 </div>
     </div>
 
     <div id="macro-manager" class="modal" hidden>
       <h2 class="modal-title">Macros</h2>
-      <button id="macro-close" class="modal-close-button i carbon:close"></button>
+      <button id="macro-close" class="modal-close-button i mgs:x"></button>
       <div id="macro-list"></div>
       <div class="macro-controls">
         <button id="macro-create">Create Macro</button>
@@ -366,7 +348,7 @@
 
     <div id="macro-editor" class="modal" hidden>
       <h2 class="modal-title">Edit Macro</h2>
-      <button id="macro-editor-close" class="modal-close-button i carbon:close"></button>
+      <button id="macro-editor-close" class="modal-close-button i mgs:x"></button>
       <div id="macro-editor-fields">
         <input id="macro-editor-name" type="text" placeholder="Name" />
         <input id="macro-editor-description" type="text" placeholder="Description" />
@@ -380,7 +362,7 @@
 
     <div id="agent-panel" class="side-panel" hidden>
       <h2 class="modal-title">Agents</h2>
-      <button id="agent-close" class="modal-close-button i carbon:close"></button>
+      <button id="agent-close" class="modal-close-button i mgs:x"></button>
       <div id="agent-selection">
         <select id="agent-select"></select>
         <button id="agent-add">Add</button>
@@ -394,7 +376,7 @@
 
     <div id="agent-editor" class="modal" hidden>
       <h2 class="modal-title">Add Agent</h2>
-      <button id="agent-editor-close" class="modal-close-button i carbon:close"></button>
+      <button id="agent-editor-close" class="modal-close-button i mgs:x"></button>
       <div id="agent-editor-fields">
         <input id="agent-editor-name" type="text" placeholder="Name" />
         <input id="agent-editor-system" type="text" placeholder="System Prompt" />

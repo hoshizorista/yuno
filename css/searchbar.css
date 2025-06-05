@@ -1,27 +1,30 @@
 #searchbar {
   z-index: 3;
   position: fixed;
-  top: calc(var(--control-space-top) + 36px);
-  left: 0;
-  width: 100%;
-  background: #fff;
+  top: calc(var(--control-space-top) + 36px + 10px); /* Navbar content area (36px) + 10px margin */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 700px;
+  background-color: #F5F5F5;
   color: #000;
-  padding-left: var(--control-space-left);
-  padding-right: calc(82px + var(--control-space-right));
+  border: 1px solid #D1D1D1;
+  border-radius: 8px; /* More pronounced rounding */
+  padding: 4px 12px; /* Consistent internal padding */
   -webkit-user-select: none;
-  max-height: calc(100% - 125px);
+  max-height: calc(100% - 150px); /* Adjusted max-height */
   overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* macOS like shadow */
 }
 
-body:not(.is-ntp) #searchbar,
-body.ntp-has-background #searchbar {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 4px -2px;
-}
-
-/* account for menu button */
-body.windows #searchbar,
-body.linux #searchbar {
-  padding-left: calc(36px + var(--control-space-left));
+#searchbar input[type="text"],
+#searchbar input[type="search"] {
+  border: none !important; /* Important to override base.css potentially */
+  background-color: transparent !important;
+  font-size: 1.2em;
+  padding: 10px 0 !important;
+  height: auto !important;
+  box-shadow: none !important; /* Remove focus shadow if needed */
 }
 
 .searchbar-plugin-container {
@@ -29,52 +32,42 @@ body.linux #searchbar {
 }
 
 .searchbar-heading {
-  font-weight: normal;
-  padding: 0.9em 0.55em 0.33em 0.55em;
-  opacity: 0.7;
+  font-weight: 500; /* Medium weight */
+  font-size: 0.9em;
+  color: #555; /* Muted color */
+  padding: 10px 12px 4px 12px; /* Adjusted padding */
   cursor: default;
 }
 
+.searchbar-item { /* Assuming .searchbar-item is used for result rows */
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+.searchbar-item:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+.searchbar-item.selected {
+  background-color: Highlight;
+  color: HighlightText;
+}
+/* In dark mode, Highlight and HighlightText might need explicit setting if system colors aren't ideal */
+.dark-mode .searchbar-item.selected {
+    background-color: #005FCC; /* Example dark mode highlight */
+    color: white;
+}
+
+
 .searchbar-floating-button {
   position: absolute;
-  right: 0;
-  top: 0.5em;
-  border: 1px #ccc solid;
-  padding: 0.33em 0.5em;
-  border-radius: 3px;
-  opacity: 0.66;
+  right: 12px; /* Adjusted for new padding */
+  top: 12px; /* Adjusted for new padding */
+  /* Styles will be inherited from base.css button, or add specific overrides for smaller version */
+  padding: 3px 8px;
+  font-size: 0.9em;
   z-index: 9;
+  /* remove old border/opacity */
 }
 
-.searchbar-floating-button:hover {
-  background-color: rgba(0, 0, 0, 0.05)
-}
-
-.dark-theme .searchbar-floating-button {
-  border-color: white;
-}
-.dark-theme .searchbar-floating-button:hover {
-  background-color: rgba(255, 255, 255, 0.075)
-}
-
-/* move the icon when there isn't room to the left of the searchbar */
-
-.fullscreen #searchbar .searchbar-item i,
-body:not(.mac) #searchbar .searchbar-item i,
-.fullscreen #searchbar .searchbar-item .icon-image,
-body:not(.mac) #searchbar .searchbar-item .icon-image {
-  left: auto;
-  right: 1.1em;
-}
-
-/* if an action button is visible, the searchbar icon should disappear (if they occupy the same position) */
-
-.fullscreen #searchbar .searchbar-item.has-action-button:hover i,
-body:not(.mac) #searchbar .searchbar-item.has-action-button:hover i,
-.fullscreen #searchbar .searchbar-item.has-action-button:hover .icon-image,
-body:not(.mac) #searchbar .searchbar-item.has-action-button:hover .icon-image {
-  display: none;
-}
 
 #searchbar .image.color-circle {
   width: 1.8em;
@@ -84,9 +77,7 @@ body:not(.mac) #searchbar .searchbar-item.has-action-button:hover .icon-image {
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding-right: 0.5em;
 }
-.dark-theme #searchbar .image.color-circle {
-  border-color: rgba(255, 255, 255, 0.2);
-}
+/* .dark-theme #searchbar .image.color-circle rule removed, handle globally if needed */
 
 .search-feedback-link {
   display: block;
@@ -103,30 +94,22 @@ body:not(.mac) #searchbar .searchbar-item.has-action-button:hover .icon-image {
 }
 
 .searchbar-shortcut {
-  font-size: 1.05em !important;
-  padding: 0.5em 0.66em;
+  font-size: 1.05em !important; /* Keep important if it's overriding something */
+  padding: 6px 10px; /* Adjusted padding */
   margin: 0.175em 0.4em 0.5em 0.4em;
   border-radius: 5px;
-  border: 1px rgba(0, 0, 0, 0.15) solid;
-}
-.dark-theme .searchbar-shortcut {
-  border-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid #C0C0C0; /* Consistent border */
+  background-color: #FFFFFF; /* Light background */
 }
 
 .searchbar-shortcut:hover,
 .searchbar-shortcut:focus {
-  background: rgba(0, 0, 0, 0.075);
-}
-
-.dark-theme .searchbar-shortcut:hover,
-.dark-theme .searchbar-shortcut:focus {
-  background: rgba(255, 255, 255, 0.075);
+  background-color: #E0E0E0; /* Consistent hover */
+  border-color: #B0B0B0;
 }
 
 .searchbar-shortcut:active {
-  background: rgba(0, 0, 0, 0.125);
+  background-color: #D0D0D0; /* Consistent active state */
 }
 
-.dark-theme .searchbar-shortcut:active {
-  background: rgba(255, 255, 255, 0.125);
-}
+/* Remove dark-theme specific shortcut styles, rely on new base or future global dark theme pass */
