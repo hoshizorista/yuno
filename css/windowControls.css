@@ -81,6 +81,9 @@ body.windows:not(.separate-titlebar) .windows-caption-buttons {
   box-sizing: content-box;
   fill: transparent;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body:not(.task-overlay-is-shown).dark-theme .windows-caption-buttons .element {
