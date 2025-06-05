@@ -22,11 +22,21 @@ body.mac {
   font-family: "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Segoe UI", sans-serif;
 }
 body.mac button {
-  border-radius: 4px;
+  -webkit-appearance: button;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
   padding: 4px 8px;
+  background-color: #f0f0f0;
+  transition: background-color 0.1s linear;
 }
 body.mac button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #eaeaea;
+}
+body.mac button:active {
+  background-color: #e0e0e0;
+}
+body.mac button:focus {
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.4);
 }
 [hidden] {
   display: none !important;
