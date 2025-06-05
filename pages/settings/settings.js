@@ -678,11 +678,7 @@ const openMacroButton = document.getElementById('open-macro-manager')
 if (openMacroButton) {
   openMacroButton.addEventListener('click', function () {
     try {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage('showMacroManager', '*')
-      } else {
-        window.postMessage('showMacroManager', '*')
-      }
+
     } catch (e) {
       window.postMessage('showMacroManager', '*')
     }
