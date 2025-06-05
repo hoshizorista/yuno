@@ -305,6 +305,8 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
   padding-left: 0.5em;
 }
 .navbar-right-actions {
+  display: flex;
+  align-items: center;
   margin-right: 2.3em;
 }
 
