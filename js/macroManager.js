@@ -107,6 +107,15 @@ const macroManager = {
     modalMode.toggle(false)
     macroManager.editor.macro = null
   },
+  pickSelector (input) {
+    const id = tabs.getSelected()
+    const script = `(function(){return new Promise(r=>{const o=document.createElement('div');o.style.position='fixed';o.style.top=0;o.style.left=0;o.style.right=0;o.style.bottom=0;o.style.zIndex=2147483647;o.style.cursor='crosshair';o.style.background='rgba(0,0,0,0.05)';const h=document.createElement('div');h.style.position='absolute';h.style.border='2px solid red';o.appendChild(h);function m(e){const b=e.target.getBoundingClientRect();h.style.top=b.top+'px';h.style.left=b.left+'px';h.style.width=b.width+'px';h.style.height=b.height+'px';}function s(e){e.preventDefault();e.stopPropagation();document.removeEventListener('mousemove',m,true);document.removeEventListener('click',s,true);o.remove();r(g(e.target));}function g(el){if(el.id)return '#'+el.id;const p=[];while(el&&el.nodeType===1&&el!==document.body){let t=el.nodeName.toLowerCase();let sib=el,n=1;while(sib.previousElementSibling){sib=sib.previousElementSibling;if(sib.nodeName===el.nodeName)n++;}if(n>1)t+=':nth-of-type('+n+')';p.unshift(t);el=el.parentElement;}return p.join(' > ');}document.addEventListener('mousemove',m,true);document.addEventListener('click',s,true);document.body.appendChild(o);});})()`
+    webviews.callAsync(id, 'executeJavaScript', script, function (err, selector) {
+      if (!err && selector) {
+        input.value = selector
+      }
+    })
+  },
   addStep (step = { type: 'navigate' }) {
     const row = document.createElement('div')
     row.className = 'macro-step'
@@ -115,7 +124,7 @@ const macroManager = {
     drag.textContent = '\u2630'
     drag.className = 'drag-handle'
     const type = document.createElement('select')
-    ;['navigate', 'click', 'input', 'sleep', 'scroll', 'screenshot', 'run_js'].forEach(t => {
+    ;['navigate', 'click', 'input', 'sleep', 'wait', 'wait_for_selector', 'press_key', 'scroll', 'screenshot', 'run_js'].forEach(t => {
       const opt = document.createElement('option')
       opt.value = t
       opt.textContent = t
@@ -128,6 +137,9 @@ const macroManager = {
     p2.className = 'param2'
     const text = document.createElement('textarea')
     text.className = 'paramText'
+    const pick = document.createElement('button')
+    pick.textContent = 'Select'
+    pick.addEventListener('click', () => macroManager.pickSelector(p1))
     const remove = document.createElement('button')
     remove.textContent = '✕'
     remove.addEventListener('click', () => row.remove())
@@ -143,26 +155,42 @@ const macroManager = {
       if (type.value === 'navigate') {
         p1.placeholder = 'URL'
         p2.style.display = 'none'
+        pick.style.display = 'none'
       } else if (type.value === 'click') {
         p1.placeholder = 'Selector'
         p2.style.display = 'none'
+        pick.style.display = 'inline-block'
       } else if (type.value === 'input') {
         p1.placeholder = 'Selector'
         p2.placeholder = 'Text'
         p2.style.display = 'inline-block'
-      } else if (type.value === 'sleep') {
+        pick.style.display = 'inline-block'
+      } else if (type.value === 'sleep' || type.value === 'wait') {
         p1.placeholder = 'ms'
         p2.style.display = 'none'
+        pick.style.display = 'none'
+      } else if (type.value === 'wait_for_selector') {
+        p1.placeholder = 'Selector'
+        p2.placeholder = 'Timeout ms'
+        p2.style.display = 'inline-block'
+        pick.style.display = 'inline-block'
+      } else if (type.value === 'press_key') {
+        p1.placeholder = 'Key'
+        p2.style.display = 'none'
+        pick.style.display = 'none'
       } else if (type.value === 'scroll') {
         p1.placeholder = 'Selector or x,y'
         p2.style.display = 'none'
+        pick.style.display = 'inline-block'
       } else if (type.value === 'screenshot') {
         p1.placeholder = 'File name'
         p2.style.display = 'none'
+        pick.style.display = 'none'
       } else if (type.value === 'run_js') {
         p1.style.display = 'none'
         p2.style.display = 'none'
         text.style.display = 'block'
+        pick.style.display = 'none'
       }
     }
     type.addEventListener('change', updateVisibility)
@@ -170,6 +198,7 @@ const macroManager = {
     row.appendChild(drag)
     row.appendChild(type)
     row.appendChild(p1)
+    row.appendChild(pick)
     row.appendChild(p2)
     row.appendChild(text)
     row.appendChild(remove)
@@ -187,8 +216,13 @@ const macroManager = {
       step.url = row.querySelector('.param1').value
     } else if (type === 'click') {
       step.selector = row.querySelector('.param1').value
-    } else if (type === 'sleep') {
+    } else if (type === 'sleep' || type === 'wait') {
       step.duration = parseInt(row.querySelector('.param1').value) || 0
+    } else if (type === 'wait_for_selector') {
+      step.selector = row.querySelector('.param1').value
+      step.timeout = parseInt(row.querySelector('.param2').value) || 0
+    } else if (type === 'press_key') {
+      step.key = row.querySelector('.param1').value
     } else if (type === 'scroll') {
       step.target = row.querySelector('.param1').value
     } else if (type === 'screenshot') {
@@ -219,8 +253,34 @@ const macroManager = {
       } else if (step.type === 'input') {
         const script = `var el=document.querySelector(${JSON.stringify(step.selector)});if(el){el.focus();el.value=${JSON.stringify(step.text)}}`
         webviews.callAsync(id, 'executeJavaScript', script)
-      } else if (step.type === 'sleep') {
+      } else if (step.type === 'sleep' || step.type === 'wait') {
         await new Promise(resolve => setTimeout(resolve, step.duration))
+      } else if (step.type === 'wait_for_selector') {
+        await new Promise(resolve => {
+          const script = `(
+            function(){
+              var sel=${JSON.stringify(step.selector)};
+              var timeout=${step.timeout || 10000};
+              return new Promise(res=>{
+                var start=Date.now();
+                (function check(){
+                  if(document.querySelector(sel)){res(true);return;}
+                  if(Date.now()-start>=timeout){res(false);return;}
+                  setTimeout(check,100);
+                })();
+              });
+            })()`
+          webviews.callAsync(id, 'executeJavaScript', script, () => resolve())
+        })
+      } else if (step.type === 'press_key') {
+        const script = `(
+          function(){
+            var e=new KeyboardEvent('keydown',{key:${JSON.stringify(step.key)}});
+            document.activeElement.dispatchEvent(e);
+            e=new KeyboardEvent('keyup',{key:${JSON.stringify(step.key)}});
+            document.activeElement.dispatchEvent(e);
+          })()`
+        webviews.callAsync(id, 'executeJavaScript', script)
       } else if (step.type === 'scroll') {
         const s = step.target
         const script = `
