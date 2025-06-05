@@ -99,12 +99,26 @@ function buildAppMenu (options = {}) {
     }
   }
 
+  var recordMacroAction = {
+    label: 'Record Macro',
+    click: function (item, window) {
+      sendIPCToWindow(window, 'toggleMacroRecording')
+    }
+  }
+
+  var showMacroManagerAction = {
+    label: 'Open Macro Manager',
+    click: function (item, window) {
+      sendIPCToWindow(window, 'showMacroManager')
+    }
+  }
+
   var template = [
     ...(options.secondary ? tabTaskActions : []),
     ...(options.secondary ? [{ type: 'separator' }] : []),
     ...(options.secondary ? personalDataItems : []),
     ...(options.secondary ? [{ type: 'separator' }] : []),
-    ...(options.secondary ? [preferencesAction] : []),
+    ...(options.secondary ? [recordMacroAction, showMacroManagerAction, preferencesAction] : []),
     ...(options.secondary ? [{ type: 'separator' }] : []),
     ...(process.platform === 'darwin'
       ? [
@@ -119,6 +133,8 @@ function buildAppMenu (options = {}) {
               type: 'separator'
             },
             preferencesAction,
+            recordMacroAction,
+            showMacroManagerAction,
             {
               label: 'Services',
               role: 'services',
@@ -226,7 +242,7 @@ function buildAppMenu (options = {}) {
           }
         },
         ...(!options.secondary && process.platform !== 'darwin' ? [{ type: 'separator' }] : []),
-        ...(!options.secondary && process.platform !== 'darwin' ? [preferencesAction] : [])
+        ...(!options.secondary && process.platform !== 'darwin' ? [recordMacroAction, showMacroManagerAction, preferencesAction] : [])
       ]
     },
     {

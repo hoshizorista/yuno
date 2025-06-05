@@ -10,6 +10,7 @@ var PDFViewer = require('pdfViewer.js')
 var tabEditor = require('navbar/tabEditor.js')
 var readerView = require('readerView.js')
 var taskOverlay = require('taskOverlay/taskOverlay.js')
+var macroManager = require('macroManager.js')
 
 module.exports = {
   initialize: function () {
@@ -133,6 +134,18 @@ module.exports = {
 
     ipc.on('toggleTaskOverlay', function () {
       taskOverlay.toggle()
+    })
+
+    ipc.on('showMacroManager', function () {
+      macroManager.show()
+    })
+
+    ipc.on('toggleMacroRecording', function () {
+      if (!macroManager.isRecording()) {
+        macroManager.startRecording()
+      } else {
+        macroManager.stopRecording()
+      }
     })
 
     ipc.on('goBack', function () {

@@ -15,6 +15,7 @@ const macroManager = {
   playButton: document.getElementById('macro-play'),
   stepButton: document.getElementById('macro-step'),
   closeButton: document.getElementById('macro-close'),
+  toolbarRecordButton: document.getElementById('macro-record-button'),
   editor: {
     container: document.getElementById('macro-editor'),
     textarea: document.getElementById('macro-editor-content'),
@@ -41,6 +42,15 @@ const macroManager = {
         macroManager.stopRecording()
       }
     })
+    if (macroManager.toolbarRecordButton) {
+      macroManager.toolbarRecordButton.addEventListener('click', () => {
+        if (!isRecording) {
+          macroManager.startRecording()
+        } else {
+          macroManager.stopRecording()
+        }
+      })
+    }
     macroManager.playButton.addEventListener('click', () => {
       const name = macroManager.nameInput.value
       const macro = macroManager.macros.find(m => m.name === name)
@@ -71,6 +81,14 @@ const macroManager = {
     window.addEventListener('message', function (e) {
       if (e.data === 'showMacroManager') {
         macroManager.show()
+      }
+    })
+    ipc.on('showMacroManager', macroManager.show)
+    ipc.on('toggleMacroRecording', () => {
+      if (!isRecording) {
+        macroManager.startRecording()
+      } else {
+        macroManager.stopRecording()
       }
     })
     macroManager.renderList()
@@ -132,6 +150,10 @@ const macroManager = {
     isRecording = true
     recordingMacro = { name: macroManager.nameInput.value || 'macro', actions: [] }
     macroManager.recordButton.textContent = 'Stop'
+    if (macroManager.toolbarRecordButton) {
+      macroManager.toolbarRecordButton.classList.remove('carbon:record')
+      macroManager.toolbarRecordButton.classList.add('carbon:stop')
+    }
     clickListener = function (e) {
       recordingMacro.actions.push({ type: 'click', x: e.clientX, y: e.clientY })
     }
@@ -146,6 +168,10 @@ const macroManager = {
     document.removeEventListener('click', clickListener, true)
     document.removeEventListener('keydown', keyListener, true)
     macroManager.recordButton.textContent = 'Record'
+    if (macroManager.toolbarRecordButton) {
+      macroManager.toolbarRecordButton.classList.remove('carbon:stop')
+      macroManager.toolbarRecordButton.classList.add('carbon:record')
+    }
     if (!recordingMacro.name || recordingMacro.name === 'macro') {
       const name = prompt('Macro name:')
       if (name) {
@@ -226,6 +252,9 @@ const macroManager = {
   hideEditor () {
     macroManager.editor.container.hidden = true
     modalMode.toggle(false)
+  },
+  isRecording () {
+    return isRecording
   }
 }
 

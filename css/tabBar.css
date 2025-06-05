@@ -315,6 +315,11 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
   width: 36px;
   font-size: 1.4em !important;
 }
+.navbar-right-actions #macro-record-button {
+  padding: 0;
+  width: 36px;
+  font-size: 1.4em !important;
+}
 
 /* audio button */
 .tab-item .tab-audio-button {
