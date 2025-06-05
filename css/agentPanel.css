@@ -1,0 +1,52 @@
+#agent-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: #fff;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode #agent-panel {
+  background: rgb(33, 37, 43);
+  border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+#agent-selection {
+  display: flex;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+#agent-chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5em;
+}
+
+#agent-chat-log .msg {
+  margin-bottom: 0.5em;
+}
+
+#agent-chat-input {
+  display: flex;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+#agent-editor-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
+.agent-editor-controls {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 1em;
+}

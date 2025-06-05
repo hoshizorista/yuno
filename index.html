@@ -153,6 +153,12 @@
           title="Macros"
           tabindex="-1"
         ></button>
+        <button
+          id="agent-button"
+          class="navbar-action-button i carbon:ibm-watson"
+          title="Agent"
+          tabindex="-1"
+        ></button>
       </div>
     </div>
 
@@ -369,6 +375,39 @@
       <div class="macro-editor-controls">
         <button id="macro-add-step">Add Step</button>
         <button id="macro-editor-save">Save</button>
+      </div>
+    </div>
+
+    <div id="agent-panel" class="side-panel" hidden>
+      <h2 class="modal-title">Agents</h2>
+      <button id="agent-close" class="modal-close-button i carbon:close"></button>
+      <div id="agent-selection">
+        <select id="agent-select"></select>
+        <button id="agent-add">Add</button>
+      </div>
+      <div id="agent-chat-log"></div>
+      <div id="agent-chat-input">
+        <input id="agent-message" type="text" placeholder="Message" />
+        <button id="agent-send">Send</button>
+      </div>
+    </div>
+
+    <div id="agent-editor" class="modal" hidden>
+      <h2 class="modal-title">Add Agent</h2>
+      <button id="agent-editor-close" class="modal-close-button i carbon:close"></button>
+      <div id="agent-editor-fields">
+        <input id="agent-editor-name" type="text" placeholder="Name" />
+        <input id="agent-editor-system" type="text" placeholder="System Prompt" />
+        <select id="agent-editor-provider">
+          <option value="openai">OpenAI</option>
+          <option value="gemini">Gemini</option>
+          <option value="ollama">Ollama</option>
+          <option value="lmstudio">LM Studio</option>
+        </select>
+        <input id="agent-editor-key" type="text" placeholder="API Key or Model" />
+      </div>
+      <div class="agent-editor-controls">
+        <button id="agent-editor-save">Save</button>
       </div>
     </div>
 

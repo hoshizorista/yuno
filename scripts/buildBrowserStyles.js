@@ -21,6 +21,7 @@ const modules = [
   'css/passwordCapture.css',
   'css/passwordViewer.css',
   'css/macroManager.css',
+  'css/agentPanel.css',
   'node_modules/dragula/dist/dragula.min.css'
 ]
 
